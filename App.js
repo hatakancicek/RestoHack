@@ -4,8 +4,13 @@ import NoUser from './Containers/NoUser';
 import firebase from 'firebase';
 import Config from './Config';
 import Loading from './Screens/Loading';
+import Chat from './Screens/Chat';
+import 'firebase/firestore';
 
 firebase.initializeApp(Config);
+const firestore = firebase.firestore();
+const settings = { timestampsInSnapshots: true, };
+firestore.settings(settings);
 
 export default class App extends React.Component {
   state = {
@@ -35,11 +40,12 @@ export default class App extends React.Component {
   }
 
   render() {
-    const { showLoading } = this.state;
+    const { showLoading, user } = this.state;
 
     return (
       <SafeAreaView style={styles.container}>
-        <NoUser />
+        {!user && <NoUser />}
+        {user && <Chat />}
         {showLoading && <Loading ref="loading" />}
       </SafeAreaView>
     );
